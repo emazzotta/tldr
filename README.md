@@ -21,9 +21,9 @@ tldr <url> [-m MODEL]
 ## Examples
 
 ```bash
-tldr https://www.youtube.com/watch?v=dQw4w9WgXcQ
-tldr https://example.com/some-article
-tldr https://example.com/deep-dive -m sonnet
+tldr "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+tldr "https://example.com/some-article"
+tldr "https://example.com/deep-dive" -m sonnet
 ```
 
 ## Install
