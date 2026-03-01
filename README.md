@@ -28,6 +28,18 @@ tldr "https://example.com/deep-dive" -m sonnet
 
 ## Install
 
+### Docker
+
+```bash
+docker compose build
+```
+
+```bash
+docker compose run --rm tldr 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+```
+
+### Local
+
 Requires [uv](https://docs.astral.sh/uv/) and [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
 
 To run from anywhere, add a wrapper script somewhere on your `PATH`:
