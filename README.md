@@ -31,10 +31,6 @@ tldr "https://example.com/deep-dive" -m sonnet
 ### Docker
 
 ```bash
-docker compose build
-```
-
-```bash
 docker compose run --rm tldr 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 ```
 
