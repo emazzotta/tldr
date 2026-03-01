@@ -33,6 +33,12 @@ tldr "https://example.com/deep-dive" -m sonnet
 ```bash
 docker compose run --rm tldr 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 ```
+To run from anywhere, add a wrapper script somewhere on your `PATH`:
+
+```bash
+#!/usr/bin/env bash
+docker compose -f /path/to/tldr/docker-compose.yml run --rm tldr "$@"
+```
 
 ### Local
 
