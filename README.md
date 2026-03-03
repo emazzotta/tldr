@@ -17,6 +17,7 @@ tldr <url> [-m MODEL]
 | Flag | Default | Description |
 |------|---------|-------------|
 | `-m`, `--model` | `opus` | Claude model (`haiku`, `sonnet`, `opus`) |
+| `-k`, `--keep` | | Save extracted full content to `tldr_content.txt` |
 
 ## Examples
 
@@ -36,7 +37,7 @@ To run from anywhere, add a wrapper script somewhere on your `PATH`:
 
 ```bash
 #!/usr/bin/env bash
-cd /path/to/tldr && uv run python -m tldr "$@"
+PYTHONPATH=/path/to/tldr uv run --project /path/to/tldr python -m tldr "$@"
 ```
 
 ### Docker
@@ -48,6 +49,6 @@ To run from anywhere, add a wrapper script somewhere on your `PATH`:
 
 ```bash
 #!/usr/bin/env bash
-docker compose -f /path/to/tldr/docker-compose.yml run --rm tldr "$@"
+TLDR_OUTPUT="$PWD" docker compose -f /path/to/tldr/docker-compose.yml run --rm tldr "$@"
 ```
 

@@ -183,12 +183,17 @@ def main():
     )
     parser.add_argument("url", help="URL to summarise (YouTube video or article)")
     parser.add_argument("-m", "--model", default="opus", help="claude model to use (default: opus)")
+    parser.add_argument("-k", "--keep", action="store_true", help="save extracted full content to a file")
     args = parser.parse_args()
 
     if is_youtube(args.url):
         text = fetch_youtube_transcript(args.url)
     else:
         text = fetch_article_text(args.url)
+
+    if args.keep:
+        Path("tldr_content.txt").write_text(text)
+        status("saved to tldr_content.txt")
 
     summarise(text, args.model)
 

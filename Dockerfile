@@ -16,4 +16,5 @@ RUN uv sync --frozen --no-dev
 
 COPY tldr/ ./tldr/
 
-ENTRYPOINT ["uv", "run", "python", "-m", "tldr"]
+ENV PYTHONPATH="/app"
+ENTRYPOINT ["uv", "run", "--project", "/app", "python", "-m", "tldr"]

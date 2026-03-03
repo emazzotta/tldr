@@ -1,6 +1,8 @@
 services:
   tldr:
     build: .
+    working_dir: /output
     volumes:
       - ${HOME}/.claude.json:/root/.claude.json:ro
       - ${HOME}/.claude:/root/.claude:rw
+      - ${TLDR_OUTPUT:-/tmp}:/output
