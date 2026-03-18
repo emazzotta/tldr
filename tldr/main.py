@@ -197,7 +197,7 @@ def fetch_pdf_text(source: str) -> tuple[str, str | None]:
 
     # Resolve source to a file path
     if source.startswith(("http://", "https://")):
-        status("downloading PDF...")
+        status("fetching...")
         with tempfile.TemporaryDirectory() as tmpdir:
             pdf_path = Path(tmpdir) / "document.pdf"
             try:
@@ -205,17 +205,23 @@ def fetch_pdf_text(source: str) -> tuple[str, str | None]:
             except Exception as e:
                 print(f"error: could not download PDF: {e}", file=sys.stderr)
                 sys.exit(1)
-            return _extract_pdf(pymupdf, pdf_path)
+            text, title_line = _extract_pdf(pymupdf, pdf_path)
     else:
         path = Path(source).expanduser()
         if not path.is_file():
             print(f"error: file not found: {source}", file=sys.stderr)
             sys.exit(1)
-        return _extract_pdf(pymupdf, path)
+        text, title_line = _extract_pdf(pymupdf, path)
+
+    if title_line:
+        status(f"fetching: {_truncate(title_line)}")
+    elif not source.startswith(("http://", "https://")):
+        status("fetching...")
+    return text, title_line
 
 
 def _extract_pdf(pymupdf, path: Path) -> tuple[str, str | None]:
-    """Open a PDF and extract text with metadata display and truncation.
+    """Open a PDF and extract text with truncation.
 
     Returns (text, title_line) where title_line may be None.
     """
@@ -231,7 +237,6 @@ def _extract_pdf(pymupdf, path: Path) -> tuple[str, str | None]:
         print("error: PDF is encrypted/password-protected", file=sys.stderr)
         sys.exit(1)
 
-    # Display metadata
     title = doc.metadata.get("title") or None
     title_line = None
     date = None
@@ -240,8 +245,6 @@ def _extract_pdf(pymupdf, path: Path) -> tuple[str, str | None]:
         date = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
     if title:
         title_line = f"{title} ({date})" if date else title
-        status(f"fetching: {_truncate(title_line)}")
-    status(f"{len(doc)} pages")
 
     status("extracting text...")
     texts = []
