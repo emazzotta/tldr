@@ -8,11 +8,6 @@ Summarise YouTube videos, articles, and PDFs from the command line via Claude.
 tldr <source> [--model MODEL] [--keep] [--force]
 ```
 
-- **YouTube**: extracts transcript via `youtube-transcript-api` (falls back to `yt-dlp`)
-- **Articles**: extracts main content via `trafilatura`
-- **PDFs**: extracts text via `pymupdf` (supports URLs and local file paths)
-- Pipes extracted text through `claude -p` for a concise summary with a "watch/read in full" verdict
-
 ### Options
 
 | Flag | Default | Description |
@@ -20,6 +15,30 @@ tldr <source> [--model MODEL] [--keep] [--force]
 | `-m`, `--model` | `opus` | Claude model (`haiku`, `sonnet`, `opus`) |
 | `-k`, `--keep` | | Save extracted full content to `tldr_content.txt` |
 | `-f`, `--force` | | Bypass cache — re-download content and re-generate summary |
+
+### Examples
+
+```bash
+tldr "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+tldr "https://example.com/some-article"
+tldr ~/Documents/report.pdf
+tldr "https://example.com/paper.pdf"
+tldr "https://example.com/deep-dive" --model sonnet
+tldr "https://example.com/some-article" --force   # bypass cache
+```
+
+Pipe through [Glow](https://github.com/charmbracelet/glow) for prettier terminal rendering:
+
+```bash
+tldr "https://example.com/some-article" | glow
+```
+
+## How it works
+
+- **YouTube**: extracts transcript via `youtube-transcript-api` (falls back to `yt-dlp`)
+- **Articles**: extracts main content via `trafilatura`
+- **PDFs**: extracts text via `pymupdf` (supports URLs and local file paths)
+- Pipes extracted text through `claude -p` for a concise summary with a **"watch/read in full"** verdict
 
 ### Caching
 
@@ -52,17 +71,6 @@ For local PDF files, the cache automatically invalidates when the file is modifi
 Use `--force` to skip the cache entirely and re-download and re-summarise from
 scratch. The fresh results are still written back to the cache.
 
-## Examples
-
-```bash
-tldr "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-tldr "https://example.com/some-article"
-tldr ~/Documents/report.pdf
-tldr "https://example.com/paper.pdf"
-tldr "https://example.com/deep-dive" --model sonnet
-tldr "https://example.com/some-article" --force   # bypass cache
-```
-
 ## Install
 
 ### Local
@@ -87,4 +95,3 @@ To run from anywhere, add a wrapper script somewhere on your `PATH`:
 #!/usr/bin/env bash
 TLDR_OUTPUT="$PWD" docker compose -f /path/to/tldr/docker-compose.yml run --rm tldr "$@"
 ```
-
